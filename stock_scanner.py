@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import numpy as np
 from talib import RSI, MACD
 import time
+import pytz
 
 def get_price_data(symbol, start_date, end_date):
     data = yf.download(symbol, start=start_date, end=end_date)
@@ -16,8 +17,8 @@ def calculate_indicators(data):
     return rsi, macd, macd_signal
 
 def analyze_stock(symbol):
-    end_date = datetime.today().strftime('%Y-%m-%d')
-    start_date_3_months_ago = (datetime.today() - timedelta(days=90)).strftime('%Y-%m-%d')
+    end_date = datetime.now(pytz.timezone('US/Eastern')).strftime('%Y-%m-%d')
+    start_date_3_months_ago = (datetime.now(pytz.timezone('US/Eastern')) - timedelta(days=90)).strftime('%Y-%m-%d')
 
     price_data = get_price_data(symbol, start_date_3_months_ago, end_date).values
 
@@ -32,6 +33,15 @@ def analyze_stock(symbol):
     average_volume = np.mean(price_data[:, 5])
 
     rsi, macd, macd_signal = calculate_indicators(price_data)
+
+    print(f"\nAnalysis for {symbol}:")
+    print(f"Yesterday's Close Price: {current_close_price:.2f}")
+    print(f"Open Price for Today: {current_open_price:.2f}")
+    print(f"Current Price: {current_price:.2f}")  # Print today's current price
+    print(f"Current Volume: {current_volume:.2f}")
+    print(f"Average Volume: {average_volume:.2f}")
+    print(f"RSI: {rsi}")
+    print(f"MACD: {macd}")
 
     if (rsi[-1] > 58) and \
             (current_volume >= 0.25 * average_volume) and \
@@ -54,9 +64,10 @@ def get_current_price(symbol):
 
 def plot_stock_data(symbol):
     try:
-        end = get_previous_weekday(datetime.today())
-        start = get_previous_weekday(end - timedelta(days=365))
-        data = yf.download(symbol, start, end)
+        end = datetime.now(pytz.timezone('US/Eastern'))
+        end = end - timedelta(hours=end.hour, minutes=end.minute, seconds=end.second, microseconds=end.microsecond)
+        start = end - timedelta(days=365)
+        data = get_price_data(symbol, start, end)
 
         plt.clear_data()
 
@@ -82,7 +93,7 @@ def plot_stock_data(symbol):
         print(f"An error occurred while plotting {symbol} data: {e}")
 
 def get_next_run_time():
-    now = datetime.now()
+    now = datetime.now(pytz.timezone('US/Eastern'))
 
     if now.hour < 10 or (now.hour == 10 and now.minute < 15):
         next_run_time = now.replace(hour=10, minute=15, second=0, microsecond=0)
@@ -98,10 +109,10 @@ def main():
     next_run_time = get_next_run_time()
     
     while True:
-        now = datetime.now()
+        now = datetime.now(pytz.timezone('US/Eastern'))
         
         next_run_time = get_next_run_time()
-        print(f"Next run time is:", next_run_time)
+        print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
         
         if now >= next_run_time:
             with open('buy_signals.txt', 'w') as file:
@@ -118,7 +129,7 @@ def main():
                     plot_stock_data(symbol)
 
             next_run_time = get_next_run_time()
-            print(f"Next run time is:", next_run_time)
+            print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
 
         time.sleep(30)
 
