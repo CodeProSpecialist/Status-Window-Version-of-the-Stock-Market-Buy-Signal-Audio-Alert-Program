@@ -22,6 +22,7 @@ def check_buy_signal(symbol):
 
 root = tk.Tk()
 root.title("Stock GUI")
+root.geometry("1024x768")
 
 # Create a frame to hold the stock symbol entry boxes
 frame = tk.Frame(root)
@@ -47,13 +48,10 @@ canvas.create_window((0, 0), window=frame_on_canvas, anchor="nw")
 symbol_labels = []
 light_indicators = []
 
-# Load stock symbols from file and create entry boxes and lights
-with open('loaded_symbols.txt', 'r') as file:
-    symbols = file.read().splitlines()
-
-for symbol in symbols:
+# Create 25 text entry boxes, lights, and labels
+for i in range(25):
     # Create label for stock symbol
-    label = tk.Label(frame_on_canvas, text=symbol, width=20, anchor="w")
+    label = tk.Label(frame_on_canvas, text="Stock Symbol " + str(i+1), width=20, anchor="w")
     label.pack(side=tk.TOP, pady=5)
     symbol_labels.append(label)
 
@@ -66,7 +64,7 @@ for symbol in symbols:
 clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
 clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=subprocess.run(["python3", "stock_scanner.py"]))
+start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=lambda: subprocess.run(["python3", "stock_scanner.py"]))
 start_button.pack(side=tk.TOP, padx=10, pady=10)
 
 update_display()  # Update display initially
