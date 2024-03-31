@@ -95,6 +95,6 @@ stop_button = tk.Button(root, text="Stop Scanning", command=stop_scanning)
 stop_button.pack(side=tk.TOP, padx=10, pady=10)
 
 exit_button = tk.Button(root, text="Exit Program", command=exit_program)
-exit_button.pack(side=tk.TOP, padx=10, pady=10)
+exit_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
 root.mainloop()
