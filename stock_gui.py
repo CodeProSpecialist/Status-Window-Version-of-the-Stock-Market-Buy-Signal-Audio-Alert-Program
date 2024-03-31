@@ -82,10 +82,10 @@ for i in range(25):
     light_indicators.append(light)
 
 # Create buttons
-clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
+clear_button = tk.Button(root, text="Clear loaded_symbols.txt ", command=clear_stock_symbols)
 clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
+load_button = tk.Button(root, text="Import or Update loaded_symbols.txt ", command=load_stock_symbols)
 load_button.pack(side=tk.TOP, padx=10, pady=10)
 
 start_button = tk.Button(root, text="Start Scanning Stocks", command=start_scanning)
