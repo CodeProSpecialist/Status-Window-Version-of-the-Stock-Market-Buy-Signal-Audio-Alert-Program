@@ -72,24 +72,34 @@ def get_current_price(symbol):
     return round(stock_data.history(period='1d')['Close'].iloc[0], 4)
 
 
-def plot_stock_data(symbol):
+def plot_stock_data(etf):
     try:
-        end = datetime.now(pytz.timezone('US/Eastern'))
-        end = end - timedelta(hours=end.hour, minutes=end.minute, seconds=end.second, microseconds=end.microsecond)
-        start = end - timedelta(days=365)
-        data = get_price_data(symbol, start, end)
+        end = get_previous_weekday(datetime.today())
+        start = get_previous_weekday(end - timedelta(days=365))
+        data = yf.download(etf, start, end)
 
-        plt.clear()
-        plt.plot(data.index, data['Close'], label='Close Price')
-        plt.plot(data.index, data['Open'], label='Open Price')
-        plt.title(f"{symbol} Stock Price")
+        plt.clear_data()
+
+        # Plotting candlesticks manually
+        for i, (_, row) in enumerate(data.iterrows()):
+            plt.plot([i, i], [row['High'], row['Low']], color='black')
+            if row['Open'] < row['Close']:
+                plt.plot([i, i], [row['Open'], row['Close']], color='green')
+            else:
+                plt.plot([i, i], [row['Open'], row['Close']], color='red')
+
+        plt.title(f"{etf} Stock Price")
         plt.xlabel("Date")
         plt.ylabel("Price")
-        plt.legend()
+
+        # Customize x-axis ticks to show day/month/year format with month in all capital letters and extra space between components
+        x_ticks = [date.strftime("%d-%b-%Y").upper() for date in data.index]
+        plt.xticks(ticks=range(len(x_ticks)), labels=x_ticks)
+
         plt.show()
 
     except Exception as e:
-        print(f"An error occurred while plotting {symbol} data: {e}")
+        print(f"An error occurred while plotting {etf} data: {e}")
 
 
 def get_next_run_time():
@@ -115,6 +125,7 @@ def main():
         next_run_time = get_next_run_time()
         print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
 
+        #if 1 == 1:     # debug code to run program 24 hours a day
         if now >= next_run_time:
             with open('buy_signals.txt', 'w') as file:
                 file.write('')  # Clear contents of buy_signals.txt
