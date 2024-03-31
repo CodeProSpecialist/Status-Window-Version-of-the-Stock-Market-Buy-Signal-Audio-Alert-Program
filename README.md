@@ -9,5 +9,5 @@ run the main program with the command:
 
 python3 stock_gui.py
 
-It is configured to only work Monday - Friday, 10:15 AM throuth 4:00 PM 
+It is configured to only work Monday - Friday, 10:15 AM throuth 4:00 PM, Eastern time. 
 
