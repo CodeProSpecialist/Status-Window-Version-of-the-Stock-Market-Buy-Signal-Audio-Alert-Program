@@ -99,6 +99,9 @@ def main():
     while True:
         now = datetime.now()
         
+        next_run_time = get_next_run_time()
+        print(f"Next run time is:", next_run_time)
+        
         if now >= next_run_time:
             with open('buy_signals.txt', 'w') as file:
                 file.write('')  # Clear contents of buy_signals.txt
@@ -114,8 +117,9 @@ def main():
                     plot_stock_data(symbol)
 
             next_run_time = get_next_run_time()
+            print(f"Next run time is:", next_run_time)
 
-        time.sleep(1)
+        time.sleep(30)
 
 if __name__ == "__main__":
     main()
