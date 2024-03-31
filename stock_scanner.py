@@ -1,14 +1,11 @@
+# stock_scanner.py
+
 import yfinance as yf
 from datetime import datetime, timedelta
 import numpy as np
 from talib import RSI, MACD
-import time
 import pytz
-import stock_gui
-
-# Load symbols from text file
-with open('loaded_symbols.txt', 'r') as file:
-    loaded_symbols = [line.strip() for line in file.readlines()]
+import time
 
 def get_price_data(symbol, start_date, end_date):
     data = yf.download(symbol, start=start_date, end=end_date)
@@ -38,9 +35,9 @@ def analyze_stock(symbol):
             (current_volume >= 0.25 * average_volume) and \
             (current_price > current_open_price) and \
             (current_price > current_close_price):
-        return True, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
+        return True
     else:
-        return False, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
+        return False
 
 def get_opening_price(symbol):
     stock_data = yf.Ticker(symbol)
@@ -50,8 +47,24 @@ def get_current_price(symbol):
     stock_data = yf.Ticker(symbol)
     return round(stock_data.history(period='1d')['Close'].iloc[0], 4)
 
+def get_previous_weekday(date):
+    while date.weekday() > 4:  # Monday is 0, Friday is 4
+        date -= timedelta(days=1)
+    return date
+
+def generate_buy_signals(etfs):
+    buy_signals = []
+    for etf in etfs:
+        if analyze_stock(etf):
+            buy_signals.append(etf + '\n')
+
+    with open('buy_signals.txt', 'w') as file:
+        file.writelines(buy_signals)
+
 def main():
     eastern = pytz.timezone('US/Eastern')
+    next_run_time = get_next_run_time()
+    next_run_time2 = datetime.now(eastern)
 
     print("")
     print("Stock Market Buy Signal Audio Alert Program by CodeProSpecialist ")
@@ -77,38 +90,18 @@ def main():
         now = datetime.now(eastern)
 
         if now >= next_run_time and now.hour < 16:
-            # if 1 == 1:      #debug code line to bypass if statement
+        #if 1 == 1:      #debug code line to bypass if statement
             if now.weekday() < 5:
-                # if 1 == 1:     #debug code line to bypass if statement
-                print("Recommended Stocks to Buy Today:")
-                etfs = loaded_symbols  # Use loaded symbols from the GUI
+            #if 1 == 1:     #debug code line to bypass if statement
+                    print("Recommended Stocks to Buy Today:")
+                    etfs = ['VGT', 'VOOV', 'VOT', 'SPMD', 'UMDD', 'VTI', 'VGT']
 
-                for etf in etfs:
-                    recommended, close_price, open_price, current_price, current_volume, average_volume, rsi, macd = analyze_stock(
-                        etf)
-                    print(f"\nAnalysis for {etf}:")
-                    print(f"Yesterday's Close Price: {close_price:.2f}")
-                    print(f"Open Price for Today: {open_price:.2f}")
-                    print(f"Current Price: {current_price:.2f}")  # Print today's current price
-                    print(f"Current Volume: {current_volume:.2f}")
-                    print(f"Average Volume: {average_volume:.2f}")
-                    print(f"RSI: {rsi}")
-                    print(f"MACD: {macd}")
+                    generate_buy_signals(etfs)
 
-                    if recommended:
-                        print(f"{etf} is recommended to buy today.")
-                        subprocess.run(["espeak", f"Buy {etf} ."])
-                    else:
-                        print(f"{etf} is not recommended to buy today.")
-
-                    plot_stock_data(etf)  # Plotting the stock data
                     time.sleep(0.5)
 
-                time.sleep(0.5)
-
-                next_run_time2 += timedelta(seconds=30)
-                print("\nNext Run Time:", next_run_time2.astimezone(eastern).strftime("%A, %B %d, %Y, %I:%M:%S %p"),
-                      "Eastern ")
+                    next_run_time2 += timedelta(seconds=30)
+                    print("\nNext Run Time:", next_run_time2.astimezone(eastern).strftime("%A, %B %d, %Y, %I:%M:%S %p"), "Eastern ")
 
         time.sleep(30)
 
