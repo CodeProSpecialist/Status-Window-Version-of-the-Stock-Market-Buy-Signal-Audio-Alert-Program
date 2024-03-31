@@ -37,37 +37,35 @@ def update_display():
 
 root = tk.Tk()
 root.title("Stock Market Analyzer")
-root.geometry("800x600")
+root.geometry("1024x768")
 
 # Entry boxes for stock symbols
 entry_boxes = []
-for i in range(75):
-    entry = tk.Entry(root)
-    entry.grid(row=i, column=0, padx=10, pady=5)
-    entry_boxes.append(entry)
+for i in range(2):
+    for j in range(75):
+        entry = tk.Entry(root, width=15)
+        entry.grid(row=i, column=j, padx=5, pady=5, sticky='w')
+        entry_boxes.append(entry)
 
 # Load Stock Symbols Button
 load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
-load_button.grid(row=75, column=0, padx=10, pady=5)
-
-# Clear Stock Symbols Button
-clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
-clear_button.grid(row=0, column=1, padx=10, pady=5)
-
-# Save Stock Symbols Button
-save_button = tk.Button(root, text="Save All Current Stock Symbols", command=save_stock_symbols)
-save_button.grid(row=76, column=0, padx=10, pady=5)
+load_button.grid(row=2, column=0, padx=10, pady=5, sticky='w')
 
 # Start Scanning Button
 start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=start_scanning)
-start_button.grid(row=0, column=2, padx=10, pady=5)
+start_button.grid(row=0, column=75, padx=10, pady=5, sticky='e')
 
 # Light Indicators Canvas
-indicators_canvas = tk.Canvas(root, width=20, height=75)
+indicators_canvas = tk.Canvas(root, width=20, height=150)
 light_indicators = []
-for i in range(75):
-    light_indicator = indicators_canvas.create_oval(5, 5 + i*10, 15, 15 + i*10, fill="white")
-    light_indicators.append(light_indicator)
-indicators_canvas.grid(row=0, column=3, rowspan=75, padx=10, pady=5)
+for i in range(2):
+    for j in range(75):
+        light_indicator = indicators_canvas.create_oval(5 + j*30, 5 + i*40, 25 + j*30, 35 + i*40, fill="white")
+        light_indicators.append(light_indicator)
+indicators_canvas.grid(row=0, column=76, rowspan=2, padx=10, pady=5, sticky='w')
+
+# Clear Stock Symbols Button
+clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
+clear_button.grid(row=2, column=76, padx=10, pady=5, sticky='e')
 
 root.mainloop()
