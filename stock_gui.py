@@ -31,7 +31,8 @@ def start_scanning():
 
 root = tk.Tk()
 root.title("Stock GUI")
-root.geometry("1024x768")
+root.attributes('-fullscreen', True)
+root.attributes('-topmost', True)  # Make the window always on top
 
 # Create a frame to hold the stock symbol entry boxes
 frame = tk.Frame(root)
@@ -78,6 +79,9 @@ for i in range(25):
 # Create buttons
 clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
 clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
+load_button.pack(side=tk.TOP, padx=10, pady=10)
 
 start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=start_scanning)
 start_button.pack(side=tk.TOP, padx=10, pady=10)
