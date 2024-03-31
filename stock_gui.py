@@ -29,10 +29,15 @@ def check_buy_signal(symbol):
 def start_scanning():
     subprocess.Popen(["gnome-terminal", "--", "python3", "stock_scanner.py"])
 
+def stop_scanning():
+    subprocess.run(["pkill", "-f", "stock_scanner.py"])
+
+def exit_program():
+    root.destroy()
+
 root = tk.Tk()
 root.title("Stock GUI")
 root.attributes('-fullscreen', True)
-root.attributes('-topmost', True)  # Make the window always on top
 
 # Create a frame to hold the stock symbol entry boxes
 frame = tk.Frame(root)
@@ -83,7 +88,13 @@ clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
 load_button.pack(side=tk.TOP, padx=10, pady=10)
 
-start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=start_scanning)
+start_button = tk.Button(root, text="Start Scanning Stocks", command=start_scanning)
 start_button.pack(side=tk.TOP, padx=10, pady=10)
+
+stop_button = tk.Button(root, text="Stop Scanning", command=stop_scanning)
+stop_button.pack(side=tk.TOP, padx=10, pady=10)
+
+exit_button = tk.Button(root, text="Exit Program", command=exit_program)
+exit_button.pack(side=tk.TOP, padx=10, pady=10)
 
 root.mainloop()
