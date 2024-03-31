@@ -1,8 +1,10 @@
+import subprocess
 import yfinance as yf
 from datetime import datetime, timedelta
 import numpy as np
 from talib import RSI, MACD
 import time
+import plotext as plt
 
 def get_price_data(symbol, start_date, end_date):
     data = yf.download(symbol, start=start_date, end=end_date)
@@ -49,8 +51,50 @@ def get_current_price(symbol):
     stock_data = yf.Ticker(symbol)
     return round(stock_data.history(period='1d')['Close'].iloc[0], 4)
 
+def plot_stock_data(symbol):
+    try:
+        end = get_previous_weekday(datetime.today())
+        start = get_previous_weekday(end - timedelta(days=365))
+        data = yf.download(symbol, start, end)
+
+        plt.clear_data()
+
+        # Plotting candlesticks manually
+        for i, (_, row) in enumerate(data.iterrows()):
+            plt.plot([i, i], [row['High'], row['Low']], color='black')
+            if row['Open'] < row['Close']:
+                plt.plot([i, i], [row['Open'], row['Close']], color='green')
+            else:
+                plt.plot([i, i], [row['Open'], row['Close']], color='red')
+
+        plt.title(f"{symbol} Stock Price")
+        plt.xlabel("Date")
+        plt.ylabel("Price")
+
+        # Customize x-axis ticks to show day/month/year format with month in all capital letters and extra space between components
+        x_ticks = [date.strftime("%d-%b-%Y").upper() for date in data.index]
+        plt.xticks(ticks=range(len(x_ticks)), labels=x_ticks)
+
+        plt.show()
+
+    except Exception as e:
+        print(f"An error occurred while plotting {symbol} data: {e}")
+
+def get_next_run_time():
+    now = datetime.now()
+
+    if now.hour < 10 or (now.hour == 10 and now.minute < 15):
+        next_run_time = now.replace(hour=10, minute=15, second=0, microsecond=0)
+    elif now.hour < 16:
+        next_run_time = now + timedelta(seconds=30)
+    else:
+        next_run_time = now.replace(hour=10, minute=15, second=0, microsecond=0)
+        next_run_time += timedelta(days=1)
+
+    return next_run_time
+
 def main():
-    next_run_time = datetime.now() + timedelta(seconds=30)
+    next_run_time = get_next_run_time()
     
     while True:
         now = datetime.now()
@@ -63,12 +107,13 @@ def main():
                 symbols = file.read().splitlines()
 
             for symbol in symbols:
-                if analyze_stock(symbol):
+                recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
+                if recommended:
                     print(f"{symbol} is recommended to buy today.")
-                else:
-                    print(f"{symbol} is not recommended to buy today.")
+                    subprocess.run(["espeak", f"Buy {symbol}."])
+                    plot_stock_data(symbol)
 
-            next_run_time = datetime.now() + timedelta(seconds=30)
+            next_run_time = get_next_run_time()
 
         time.sleep(1)
 
