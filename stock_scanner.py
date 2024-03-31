@@ -5,7 +5,7 @@ import numpy as np
 from talib import RSI, MACD
 import time
 import pytz
-import plotext.plot as plt
+import plotext as plt
 
 
 def get_price_data(symbol, start_date, end_date):
