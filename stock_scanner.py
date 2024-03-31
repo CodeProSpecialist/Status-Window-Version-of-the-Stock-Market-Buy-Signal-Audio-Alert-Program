@@ -127,7 +127,7 @@ def main():
             for symbol in symbols:
                 recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
                 
-                print(f"\nAnalysis for {etf}:")
+                print(f"\nAnalysis for {symbol}:")
                 print(f"Yesterday's Close Price: {close_price:.2f}")
                 print(f"Open Price for Today: {open_price:.2f}")
                 print(f"Current Price: {current_price:.2f}")  # Print today's current price
