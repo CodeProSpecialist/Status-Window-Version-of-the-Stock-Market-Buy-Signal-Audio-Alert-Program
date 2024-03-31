@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-import subprocess
+import subprocess  # Import subprocess module for running external scripts
 
 def save_stock_symbols():
     with open('loaded_symbols.txt', 'w') as file:
@@ -25,7 +25,7 @@ def load_stock_symbols():
     update_display()
 
 def start_scanning():
-    subprocess.Popen(["python3", "stock_scanner.py"])
+    subprocess.Popen(["python3", "stock_scanner.py"])  # Run stock_scanner.py as a separate process
 
 def update_display():
     for i, symbol in enumerate(loaded_symbols):
