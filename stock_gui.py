@@ -37,7 +37,8 @@ def exit_program():
 
 root = tk.Tk()
 root.title("Stock GUI")
-root.attributes('-fullscreen', True)
+root.attributes('-fullscreen', False)
+root.geometry('825x850')
 
 # Create a frame to hold the stock symbol entry boxes
 frame = tk.Frame(root)
