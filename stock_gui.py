@@ -76,8 +76,13 @@ for i in range(25):
 clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
 clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
-load_button.pack(side=tk.BOTTOM, padx=10, pady=10)
+start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=lambda: subprocess.run(["python3", "stock_scanner.py"]))
+start_button.pack(side=tk.TOP, padx=10, pady=10)
 
-update_display()  # Update display initially
+stop_button = tk.Button(root, text="Stop Scanning", command=lambda: subprocess.run(["pkill", "-f", "stock_scanner.py"]))
+stop_button.pack(side=tk.TOP, padx=10, pady=10)
+
+load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
+load_button.pack(side=tk.TOP, padx=10, pady=10)
+
 root.mainloop()
