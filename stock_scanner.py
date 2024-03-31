@@ -63,11 +63,11 @@ def get_current_price(symbol):
     return round(stock_data.history(period='1d')['Close'].iloc[0], 4)
 
 
-def plot_stock_data(etf):
+def plot_stock_data(symbol):
     try:
         end = get_previous_weekday(datetime.today())
         start = get_previous_weekday(end - timedelta(days=365))
-        data = yf.download(etf, start, end)
+        data = yf.download(symbol, start, end)
 
         plt.clear_data()
 
@@ -79,7 +79,7 @@ def plot_stock_data(etf):
             else:
                 plt.plot([i, i], [row['Open'], row['Close']], color='red')
 
-        plt.title(f"{etf} Stock Price")
+        plt.title(f"{symbol} Stock Price")
         plt.xlabel("Date")
         plt.ylabel("Price")
 
@@ -90,7 +90,7 @@ def plot_stock_data(etf):
         plt.show()
 
     except Exception as e:
-        print(f"An error occurred while plotting {etf} data: {e}")
+        print(f"An error occurred while plotting {symbol} data: {e}")
 
 
 def get_next_run_time():
