@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-import os
+import subprocess
 
 def save_stock_symbols():
     with open('loaded_symbols.txt', 'w') as file:
@@ -23,6 +23,9 @@ def load_stock_symbols():
         if symbol:
             loaded_symbols.append(symbol)
     update_display()
+
+def start_scanning():
+    subprocess.Popen(["python3", "stock_scanner.py"])
 
 def update_display():
     for i, symbol in enumerate(loaded_symbols):
