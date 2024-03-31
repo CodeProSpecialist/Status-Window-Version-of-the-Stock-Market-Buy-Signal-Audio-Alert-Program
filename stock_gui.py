@@ -28,9 +28,11 @@ def start_scanning():
     subprocess.Popen(["python3", "stock_scanner.py"])  # Run stock_scanner.py as a separate process
 
 def update_display():
+    with open('buy_signals.txt', 'r') as file:
+        buy_signals = file.readlines()
+
     for i, symbol in enumerate(loaded_symbols):
-        recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
-        if recommended:
+        if symbol + '\n' in buy_signals:
             indicators_canvas.itemconfig(light_indicators[i], fill="green")
         else:
             indicators_canvas.itemconfig(light_indicators[i], fill="red")
