@@ -20,6 +20,10 @@ def analyze_stock(symbol):
 
     price_data = get_price_data(symbol, start_date_3_months_ago, end_date).values
 
+    if len(price_data) == 0:
+        print(f"No price data available for {symbol}")
+        return False, 0, 0, 0, 0, 0, 0, 0
+
     current_close_price = price_data[-1, 3]
     current_open_price = get_opening_price(symbol)
     current_price = get_current_price(symbol)  # Get today's current price
@@ -32,11 +36,10 @@ def analyze_stock(symbol):
             (current_volume >= 0.25 * average_volume) and \
             (current_price > current_open_price) and \
             (current_price > current_close_price):
-        with open('buy_signals.txt', 'a') as file:
-            file.write(symbol + '\n')  # Write symbol to buy_signals.txt
-        return True
+        return True, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
     else:
-        return False
+        return False, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
+
 
 def get_opening_price(symbol):
     stock_data = yf.Ticker(symbol)
