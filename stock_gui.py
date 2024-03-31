@@ -26,6 +26,9 @@ def check_buy_signal(symbol):
         buy_signals = file.read().splitlines()
     return symbol in buy_signals
 
+def start_scanning():
+    subprocess.Popen(["gnome-terminal", "--", "python3", "stock_scanner.py"])
+
 root = tk.Tk()
 root.title("Stock GUI")
 root.geometry("1024x768")
@@ -63,26 +66,20 @@ light_indicators = []
 
 # Create 25 labels for stock symbols
 for i in range(25):
-    label = tk.Label(frame_on_canvas, text="", width=20, anchor="e")
-    label.pack(side=tk.TOP, padx=10, pady=5)
+    label = tk.Label(frame_on_canvas, text="", width=20, anchor="w")
+    label.grid(row=i, column=0, padx=10, pady=5)
     symbol_labels.append(label)
 
     # Create light indicator
     light = tk.Label(frame_on_canvas, width=3, bg="red")
-    light.pack(side=tk.TOP, padx=10, pady=5)
+    light.grid(row=i, column=1, padx=10, pady=5)
     light_indicators.append(light)
 
 # Create buttons
 clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
 clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=lambda: subprocess.run(["python3", "stock_scanner.py"]))
+start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=start_scanning)
 start_button.pack(side=tk.TOP, padx=10, pady=10)
-
-stop_button = tk.Button(root, text="Stop Scanning", command=lambda: subprocess.run(["pkill", "-f", "stock_scanner.py"]))
-stop_button.pack(side=tk.TOP, padx=10, pady=10)
-
-load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
-load_button.pack(side=tk.TOP, padx=10, pady=10)
 
 root.mainloop()
