@@ -32,18 +32,18 @@ root.geometry("1024x768")
 
 # Create a frame to hold the stock symbol entry boxes
 frame = tk.Frame(root)
-frame.pack()
+frame.pack(side=tk.LEFT, fill=tk.Y)
 
 # Create entry boxes for stock symbols
 entry_boxes = []
 for i in range(25):
     entry = tk.Entry(frame, width=20)
-    entry.grid(row=i, column=0, padx=10, pady=5)
+    entry.pack(side=tk.TOP, padx=10, pady=5)
     entry_boxes.append(entry)
 
 # Create a canvas to hold the stock symbol labels and light indicators
 canvas = tk.Canvas(root)
-canvas.pack(side=tk.LEFT, fill=tk.Y)
+canvas.pack(side=tk.RIGHT, fill=tk.Y)
 
 # Create a scrollbar for the canvas
 scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=canvas.yview)
@@ -63,13 +63,13 @@ light_indicators = []
 
 # Create 25 labels for stock symbols
 for i in range(25):
-    label = tk.Label(frame_on_canvas, text="", width=20, anchor="w")
-    label.grid(row=i, column=1, padx=10, pady=5)
+    label = tk.Label(frame_on_canvas, text="", width=20, anchor="e")
+    label.pack(side=tk.TOP, padx=10, pady=5)
     symbol_labels.append(label)
 
     # Create light indicator
     light = tk.Label(frame_on_canvas, width=3, bg="red")
-    light.grid(row=i, column=2, padx=10, pady=5)
+    light.pack(side=tk.TOP, padx=10, pady=5)
     light_indicators.append(light)
 
 # Create buttons
