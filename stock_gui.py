@@ -28,46 +28,57 @@ def start_scanning():
     subprocess.Popen(["python3", "stock_scanner.py"])  # Run stock_scanner.py as a separate process
 
 def update_display():
-    with open('buy_signals.txt', 'r') as file:
-        buy_signals = file.readlines()
-
     for i, symbol in enumerate(loaded_symbols):
-        if symbol + '\n' in buy_signals:
+        if symbol in buy_signals:
             indicators_canvas.itemconfig(light_indicators[i], fill="green")
         else:
             indicators_canvas.itemconfig(light_indicators[i], fill="red")
 
 root = tk.Tk()
 root.title("Stock Market Analyzer")
-root.geometry("1024x768")
+
+# Create a canvas with scrollbar
+canvas = tk.Canvas(root)
+canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=canvas.yview)
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+canvas.configure(yscrollcommand=scrollbar.set)
+canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+frame = tk.Frame(canvas)
+canvas.create_window((0, 0), window=frame, anchor="nw")
 
 # Entry boxes for stock symbols
 entry_boxes = []
-for i in range(2):
-    for j in range(75):
-        entry = tk.Entry(root, width=15)
-        entry.grid(row=i, column=j, padx=5, pady=5, sticky='w')
-        entry_boxes.append(entry)
+for i in range(75):
+    entry = tk.Entry(frame, width=15)
+    entry.grid(row=i % 25, column=i // 25, padx=5, pady=5, sticky='w')
+    entry_boxes.append(entry)
 
 # Load Stock Symbols Button
-load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
-load_button.grid(row=2, column=0, padx=10, pady=5, sticky='w')
+load_button = tk.Button(frame, text="Load Stock Symbols", command=load_stock_symbols)
+load_button.grid(row=25, column=0, columnspan=2, padx=10, pady=5)
 
 # Start Scanning Button
-start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=start_scanning)
-start_button.grid(row=0, column=75, padx=10, pady=5, sticky='e')
+start_button = tk.Button(frame, text="Start Scanning for Stocks to Buy", command=start_scanning)
+start_button.grid(row=26, column=0, columnspan=2, padx=10, pady=5)
 
 # Light Indicators Canvas
-indicators_canvas = tk.Canvas(root, width=20, height=150)
+indicators_canvas = tk.Canvas(frame, width=20, height=75)
 light_indicators = []
-for i in range(2):
-    for j in range(75):
-        light_indicator = indicators_canvas.create_oval(5 + j*30, 5 + i*40, 25 + j*30, 35 + i*40, fill="white")
-        light_indicators.append(light_indicator)
-indicators_canvas.grid(row=0, column=76, rowspan=2, padx=10, pady=5, sticky='w')
+for i in range(75):
+    light_indicator = indicators_canvas.create_oval(5, 5 + i*10, 15, 15 + i*10, fill="white")
+    light_indicators.append(light_indicator)
+indicators_canvas.grid(row=0, column=2, rowspan=25, padx=10, pady=5)
 
 # Clear Stock Symbols Button
-clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
-clear_button.grid(row=2, column=76, padx=10, pady=5, sticky='e')
+clear_button = tk.Button(frame, text="Clear Stock Symbols", command=clear_stock_symbols)
+clear_button.grid(row=27, column=0, columnspan=2, padx=10, pady=5)
+
+# Read buy signals
+with open('buy_signals.txt', 'r') as file:
+    buy_signals = file.read().splitlines()
 
 root.mainloop()
