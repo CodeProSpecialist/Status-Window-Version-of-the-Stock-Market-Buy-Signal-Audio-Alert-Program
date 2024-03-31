@@ -38,15 +38,6 @@ def analyze_stock(symbol):
 
     rsi, macd, macd_signal = calculate_indicators(price_data)
 
-    print(f"\nAnalysis for {symbol}:")
-    print(f"Yesterday's Close Price: {current_close_price:.2f}")
-    print(f"Open Price for Today: {current_open_price:.2f}")
-    print(f"Current Price: {current_price:.2f}")  # Print today's current price
-    print(f"Current Volume: {current_volume:.2f}")
-    print(f"Average Volume: {average_volume:.2f}")
-    print(f"RSI: {rsi}")
-    print(f"MACD: {macd}")
-
     if (rsi[-1] > 58) and \
             (current_volume >= 0.25 * average_volume) and \
             (current_price > current_open_price) and \
@@ -135,6 +126,16 @@ def main():
 
             for symbol in symbols:
                 recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
+                
+                print(f"\nAnalysis for {etf}:")
+                print(f"Yesterday's Close Price: {close_price:.2f}")
+                print(f"Open Price for Today: {open_price:.2f}")
+                print(f"Current Price: {current_price:.2f}")  # Print today's current price
+                print(f"Current Volume: {current_volume:.2f}")
+                print(f"Average Volume: {average_volume:.2f}")
+                print(f"RSI: {rsi}")
+                print(f"MACD: {macd}")
+                
                 if recommended:
                     print(f"{symbol} is recommended to buy today.")
                     subprocess.run(["espeak", f"Buy {symbol}."])
