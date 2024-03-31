@@ -1,12 +1,8 @@
-# stock_scanner.py
-
 import yfinance as yf
 from datetime import datetime, timedelta
 import numpy as np
 from talib import RSI, MACD
-import pytz
 import time
-from stock_common import load_stock_symbols  # Import load_stock_symbols function from stock_common module
 
 def get_price_data(symbol, start_date, end_date):
     data = yf.download(symbol, start=start_date, end=end_date)
@@ -53,8 +49,6 @@ def get_current_price(symbol):
 def main():
     next_run_time = datetime.now() + timedelta(seconds=30)
     
-    symbols = load_stock_symbols()  # Load stock symbols
-    
     while True:
         now = datetime.now()
         
@@ -62,8 +56,9 @@ def main():
             with open('buy_signals.txt', 'w') as file:
                 file.write('')  # Clear contents of buy_signals.txt
             
-            print("Recommended Stocks to Buy Today:")
-            
+            with open('loaded_symbols.txt', 'r') as file:
+                symbols = file.read().splitlines()
+
             for symbol in symbols:
                 if analyze_stock(symbol):
                     print(f"{symbol} is recommended to buy today.")
