@@ -15,6 +15,12 @@ def clear_stock_symbols():
         file.write('')
     update_display()
 
+def load_stock_symbols():
+    symbols = [entry.get() for entry in entry_boxes if entry.get()]
+    with open('loaded_symbols.txt', 'w') as file:
+        file.write('\n'.join(symbols))
+    update_display()
+
 def check_buy_signal(symbol):
     with open('buy_signals.txt', 'r') as file:
         buy_signals = file.read().splitlines()
@@ -27,6 +33,13 @@ root.geometry("1024x768")
 # Create a frame to hold the stock symbol entry boxes
 frame = tk.Frame(root)
 frame.pack()
+
+# Create entry boxes for stock symbols
+entry_boxes = []
+for i in range(25):
+    entry = tk.Entry(frame, width=20)
+    entry.grid(row=i, column=0, padx=10, pady=5)
+    entry_boxes.append(entry)
 
 # Create a canvas to hold the stock symbol labels and light indicators
 canvas = tk.Canvas(root)
@@ -48,29 +61,23 @@ canvas.create_window((0, 0), window=frame_on_canvas, anchor="nw")
 symbol_labels = []
 light_indicators = []
 
-# Create 25 text entry boxes, lights, and labels
+# Create 25 labels for stock symbols
 for i in range(25):
-    # Create label for stock symbol
-    label = tk.Label(frame_on_canvas, text="Stock Symbol " + str(i+1), width=20, anchor="w")
-    label.pack(side=tk.TOP, pady=5)
+    label = tk.Label(frame_on_canvas, text="", width=20, anchor="w")
+    label.grid(row=i, column=1, padx=10, pady=5)
     symbol_labels.append(label)
 
     # Create light indicator
     light = tk.Label(frame_on_canvas, width=3, bg="red")
-    light.pack(side=tk.TOP, pady=5)
+    light.grid(row=i, column=2, padx=10, pady=5)
     light_indicators.append(light)
 
 # Create buttons
 clear_button = tk.Button(root, text="Clear Stock Symbols", command=clear_stock_symbols)
 clear_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-start_button = tk.Button(root, text="Start Scanning for Stocks to Buy", command=lambda: subprocess.run(["python3", "stock_scanner.py"]))
-start_button.pack(side=tk.TOP, padx=10, pady=10)
+load_button = tk.Button(root, text="Load Stock Symbols", command=load_stock_symbols)
+load_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-stop_button = tk.Button(root, text="Stop Scanning", command=lambda: subprocess.run(["pkill", "-f", "stock_scanner.py"]))
-stop_button.pack(side=tk.TOP, padx=10, pady=10)
-
-load_button = tk.Button(root, text="Load Stock Symbols", command=lambda: subprocess.run(["python3", "stock_gui.py"]))
-load_button.pack(side=tk.TOP, padx=10, pady=10)
-
+update_display()  # Update display initially
 root.mainloop()
