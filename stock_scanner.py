@@ -170,7 +170,6 @@ def main():
 
                     plot_stock_data(symbol)
 
-                    recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
                     if recommended:
                         print(f"{symbol} is recommended to buy today.")
                         subprocess.run(["espeak", f"Buy {symbol}."])
