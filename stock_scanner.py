@@ -8,10 +8,6 @@ import pytz
 import plotext as plt
 
 
-# List to store the labels and light indicators
-symbol_labels = []
-light_indicators = []
-
 def get_price_data(symbol, start_date, end_date):
     data = yf.download(symbol, start=start_date, end=end_date)
     return data
@@ -97,61 +93,92 @@ def plot_stock_data(symbol):
         print(f"An error occurred while plotting {symbol} data: {e}")
 
 
-def get_next_run_time():
-    now = datetime.now(pytz.timezone('US/Eastern'))
 
-    if now.hour < 10 or (now.hour == 10 and now.minute < 15):
+def get_next_run_time():
+    eastern = pytz.timezone('US/Eastern')
+    now = datetime.now(eastern)
+
+    if now.weekday() >= 5:
+        next_run_time = now.replace(hour=10, minute=15, second=0, microsecond=0)
+        next_run_time += timedelta(days=(7 - now.weekday()))
+    elif now.hour < 10 or (now.hour == 10 and now.minute < 15):
         next_run_time = now.replace(hour=10, minute=15, second=0, microsecond=0)
     elif now.hour < 16:
         next_run_time = now + timedelta(seconds=30)
     else:
         next_run_time = now.replace(hour=10, minute=15, second=0, microsecond=0)
         next_run_time += timedelta(days=1)
+        while next_run_time.weekday() >= 5:
+            next_run_time += timedelta(days=1)
 
     return next_run_time
 
 
 def main():
+    eastern = pytz.timezone('US/Eastern')
     next_run_time = get_next_run_time()
+    next_run_time2 = datetime.now(eastern)
+
+    print("")
+    print("Stock Market Buy Signal Audio Alert Program by CodeProSpecialist ")
+    print("")
+    print("Date and Time: ", datetime.now(eastern).strftime("%A, %B %d, %Y, %I:%M:%S %p"), "Eastern ")
+    print("")
+    print("This program runs from 10:15 AM until 4:00 PM, Eastern, Monday - Friday. ")
+    print("")
+    subprocess.run(["espeak",
+                    "Remember to not buy before 10:15 AM and do not buy before I recommend to buy or you are buying "
+                    "based on emotion and emotion or excitement buying is not productive. "])
+
+    subprocess.run(["espeak",
+                    "Always wait at least 1 month before buying an IPO or Initial Public Offering or else the price "
+                    "will almost always decrease by 95%.  "])
+
+    print("")
+    print("This program will begin in 30 seconds. ")
+    subprocess.run(["espeak", "This program will begin in 30 seconds. "])
+
+    print("")
+    # print("Next Run Time:", next_run_time.astimezone(eastern).strftime("%A, %B %d, %Y, %I:%M:%S %p"), "Eastern ")
+    print("")
 
     while True:
         now = datetime.now(pytz.timezone('US/Eastern'))
 
-        next_run_time = get_next_run_time()
-        print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
-
         #if 1 == 1:  # debug code line to run main loop 24 hours
-        if now >= next_run_time:
-            with open('buy_signals.txt', 'w') as file:
-                file.write('')  # Clear contents of buy_signals.txt
+        if now >= next_run_time and now.hour < 16:
+            # if 1 == 1:      #debug code line to bypass if statement
+            if now.weekday() < 5:
+                with open('buy_signals.txt', 'w') as file:
+                    file.write('')  # Clear contents of buy_signals.txt
 
-            with open('loaded_symbols.txt', 'r') as file:
-                symbols = file.read().splitlines()
+                with open('loaded_symbols.txt', 'r') as file:
+                    symbols = file.read().splitlines()
 
-            for symbol in symbols:
-                recommended, close_price, open_price, current_price, current_volume, average_volume, rsi, macd = analyze_stock(
-                    symbol)
+                for symbol in symbols:
+                    recommended, close_price, open_price, current_price, current_volume, average_volume, rsi, macd = analyze_stock(
+                        symbol)
 
-                print(f"\nAnalysis for {symbol}:")
-                print(f"Yesterday's Close Price: {close_price:.2f}")
-                print(f"Open Price for Today: {open_price:.2f}")
-                print(f"Current Price: {current_price:.2f}")  # Print today's current price
-                print(f"Current Volume: {current_volume:.2f}")
-                print(f"Average Volume: {average_volume:.2f}")
-                print(f"RSI: {rsi}")
-                print(f"MACD: {macd}")
+                    print(f"\nAnalysis for {symbol}:")
+                    print(f"Yesterday's Close Price: {close_price:.2f}")
+                    print(f"Open Price for Today: {open_price:.2f}")
+                    print(f"Current Price: {current_price:.2f}")  # Print today's current price
+                    print(f"Current Volume: {current_volume:.2f}")
+                    print(f"Average Volume: {average_volume:.2f}")
+                    print(f"RSI: {rsi}")
+                    print(f"MACD: {macd}")
 
-                plot_stock_data(symbol)
+                    plot_stock_data(symbol)
 
-                recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
-                if recommended:
-                    print(f"{symbol} is recommended to buy today.")
-                    subprocess.run(["espeak", f"Buy {symbol}."])
-                    with open('buy_signals.txt', 'a') as file:
-                        file.write(f"{symbol}\n")
+                    recommended, _, _, _, _, _, _, _ = analyze_stock(symbol)
+                    if recommended:
+                        print(f"{symbol} is recommended to buy today.")
+                        subprocess.run(["espeak", f"Buy {symbol}."])
+                        with open('buy_signals.txt', 'a') as file:
+                            file.write(f"{symbol}\n")
 
-        next_run_time = get_next_run_time()
-        #print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
+            next_run_time2 += timedelta(seconds=30)
+            print("\nNext Run Time:", next_run_time2.astimezone(eastern).strftime("%A, %B %d, %Y, %I:%M:%S %p"), "Eastern ")
 
         time.sleep(30)
 
