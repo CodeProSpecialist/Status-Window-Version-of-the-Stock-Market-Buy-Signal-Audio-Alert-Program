@@ -1,7 +1,10 @@
 # Status-Window-Version-of-the-Stock-Market-Buy-Signal-Audio-Alert-Program
 A Python Window program that has a status window for monitoring Stock Market Buy Signals. 
 
-This is a brand new program in beta version. 
+Green lights for buy signals and red lights when there are no current buy signals. The buy signals also include an audio alert to buy the stock. 
+
+Stock charts displayed in the 
+terminal with technical data for each Stock symbol. 
 
 This python 3 code was tested with python 3.10 in Ubuntu Linux. 
 
