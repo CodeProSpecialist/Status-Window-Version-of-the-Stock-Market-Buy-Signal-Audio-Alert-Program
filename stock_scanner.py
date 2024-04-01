@@ -172,6 +172,10 @@ def main():
                         with open('buy_signals.txt', 'a') as file:
                             file.write(f"{symbol}\n")
 
+                    time.sleep(0.5)
+
+                time.sleep(0.5)
+
             next_run_time2 += timedelta(seconds=30)
             print("\nNext Run Time:", next_run_time2.astimezone(eastern).strftime("%A, %B %d, %Y, %I:%M:%S %p"), "Eastern ")
 
