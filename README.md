@@ -8,7 +8,7 @@ It saves your stock list for tomorrow.
 Stock charts displayed in the 
 terminal with technical data for each Stock symbol. 
 
-This python 3 code was tested with python 3.10 in Ubuntu Linux. 
+This python 3 code was tested with python 3.10 in Ubuntu 22.04 LTS Linux. 
 
 run the main program with the command: 
 
