@@ -151,7 +151,7 @@ def main():
                         file.write(f"{symbol}\n")
 
         next_run_time = get_next_run_time()
-        print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
+        #print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
 
         time.sleep(30)
 
