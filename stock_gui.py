@@ -1,5 +1,6 @@
 import tkinter as tk
 import subprocess
+import time
 
 def update_display():
     with open('loaded_symbols.txt', 'r') as file:
@@ -9,6 +10,9 @@ def update_display():
     for i, symbol in enumerate(symbols):
         symbol_labels[i].config(text=symbol)
         light_indicators[i].config(bg="green" if check_buy_signal(symbol) else "red")
+
+    # Schedule the next update after 2 seconds
+    root.after(500, update_display)
 
 def clear_stock_symbols():
     with open('loaded_symbols.txt', 'w') as file:
@@ -73,13 +77,13 @@ light_indicators = []
 
 # Create 25 labels for stock symbols
 for i in range(25):
-    label = tk.Label(frame_on_canvas, text="", width=20, anchor="w")
-    label.grid(row=i, column=0, padx=10, pady=5)
+    label = tk.Label(frame_on_canvas, text="", width=5, anchor="w")
+    label.grid(row=i, column=0, padx=(25, 2), pady=5)  # Adjusted padx to (2, 2)
     symbol_labels.append(label)
 
     # Create light indicator
-    light = tk.Label(frame_on_canvas, width=3, bg="red")
-    light.grid(row=i, column=1, padx=10, pady=5)
+    light = tk.Label(frame_on_canvas, width=3, bg="red", anchor="w")
+    light.grid(row=i, column=1, padx=(2, 10), pady=5)  # Adjusted padx to (2, 10)
     light_indicators.append(light)
 
 # Create buttons
@@ -97,5 +101,8 @@ stop_button.pack(side=tk.TOP, padx=10, pady=10)
 
 exit_button = tk.Button(root, text="Exit Program", command=exit_program)
 exit_button.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+# Start the initial update loop
+update_display()
 
 root.mainloop()
