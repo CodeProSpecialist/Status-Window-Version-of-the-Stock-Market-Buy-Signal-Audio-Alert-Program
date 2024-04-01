@@ -7,9 +7,15 @@ import time
 import pytz
 import plotext as plt
 
+
+# List to store the labels and light indicators
+symbol_labels = []
+light_indicators = []
+
 def get_price_data(symbol, start_date, end_date):
     data = yf.download(symbol, start=start_date, end=end_date)
     return data
+
 
 def calculate_indicators(data):
     close_prices = data[:, 4]
@@ -17,13 +23,16 @@ def calculate_indicators(data):
     macd, macd_signal, _ = MACD(close_prices, fastperiod=12, slowperiod=26, signalperiod=9)
     return rsi, macd, macd_signal
 
+
 def get_opening_price(symbol):
     stock_data = yf.Ticker(symbol)
     return round(stock_data.history(period="1d")["Open"].iloc[0], 4)
 
+
 def get_current_price(symbol):
     stock_data = yf.Ticker(symbol)
     return round(stock_data.history(period='1d')['Close'].iloc[0], 4)
+
 
 def analyze_stock(symbol):
     end_date = datetime.today().strftime('%Y-%m-%d')
@@ -43,9 +52,14 @@ def analyze_stock(symbol):
             (current_volume >= 0.25 * average_volume) and \
             (current_price > current_open_price) and \
             (current_price > current_close_price):
-        return True, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
+        return True, round(current_close_price, 2), round(current_open_price, 2), round(current_price,
+                                                                                        2), current_volume, average_volume, round(
+            rsi[-1], 2), round(macd[-1], 2)
     else:
-        return False, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
+        return False, round(current_close_price, 2), round(current_open_price, 2), round(current_price,
+                                                                                         2), current_volume, average_volume, round(
+            rsi[-1], 2), round(macd[-1], 2)
+
 
 def get_previous_weekday(date):
     while date.weekday() > 4:  # Monday is 0, Friday is 4
@@ -96,25 +110,27 @@ def get_next_run_time():
 
     return next_run_time
 
+
 def main():
     next_run_time = get_next_run_time()
-    
+
     while True:
         now = datetime.now(pytz.timezone('US/Eastern'))
-        
+
         next_run_time = get_next_run_time()
         print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
-        
-        if 1 == 1:     #debug code line to run main loop 24 hours
-        #if now >= next_run_time:
+
+        #if 1 == 1:  # debug code line to run main loop 24 hours
+        if now >= next_run_time:
             with open('buy_signals.txt', 'w') as file:
                 file.write('')  # Clear contents of buy_signals.txt
-            
+
             with open('loaded_symbols.txt', 'r') as file:
                 symbols = file.read().splitlines()
 
             for symbol in symbols:
-                recommended, close_price, open_price, current_price, current_volume, average_volume, rsi, macd = analyze_stock(symbol)
+                recommended, close_price, open_price, current_price, current_volume, average_volume, rsi, macd = analyze_stock(
+                    symbol)
 
                 print(f"\nAnalysis for {symbol}:")
                 print(f"Yesterday's Close Price: {close_price:.2f}")
@@ -134,10 +150,11 @@ def main():
                     with open('buy_signals.txt', 'a') as file:
                         file.write(f"{symbol}\n")
 
-            next_run_time = get_next_run_time()
-            print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
+        next_run_time = get_next_run_time()
+        print(f"Next run time is:", next_run_time.astimezone(pytz.timezone('US/Eastern')))
 
         time.sleep(30)
+
 
 if __name__ == "__main__":
     main()
