@@ -40,7 +40,7 @@ def exit_program():
     root.destroy()
 
 root = tk.Tk()
-root.title("Stock GUI")
+root.title("Stock Market Buy Signal Audio Alert Program by CodeProSpecialist")
 root.attributes('-fullscreen', False)
 root.geometry('825x850')
 
