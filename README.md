@@ -3,6 +3,8 @@ A Python Window program that has a status window for monitoring Stock Market Buy
 
 Green lights for buy signals and red lights when there are no current buy signals. The buy signals also include an audio alert to buy the stock. 
 
+It saves your stock list for tomorrow. 
+
 Stock charts displayed in the 
 terminal with technical data for each Stock symbol. 
 
