@@ -48,13 +48,9 @@ def analyze_stock(symbol):
             (current_volume >= 0.25 * average_volume) and \
             (current_price > current_open_price) and \
             (current_price > current_close_price):
-        return True, round(current_close_price, 2), round(current_open_price, 2), round(current_price,
-                                                                                        2), current_volume, average_volume, round(
-            rsi[-1], 2), round(macd[-1], 2)
+        return True, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
     else:
-        return False, round(current_close_price, 2), round(current_open_price, 2), round(current_price,
-                                                                                         2), current_volume, average_volume, round(
-            rsi[-1], 2), round(macd[-1], 2)
+        return False, round(current_close_price, 2), round(current_open_price, 2), round(current_price, 2), current_volume, average_volume, round(rsi[-1], 2), round(macd[-1], 2)
 
 
 def get_previous_weekday(date):
