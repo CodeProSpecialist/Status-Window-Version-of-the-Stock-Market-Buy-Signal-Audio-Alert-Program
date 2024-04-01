@@ -17,7 +17,7 @@ def update_display():
 def clear_stock_symbols():
     with open('loaded_symbols.txt', 'w') as file:
         file.write('')
-    update_display()
+    #update_display()
 
 def load_stock_symbols():
     symbols = [entry.get() for entry in entry_boxes if entry.get()]
@@ -31,7 +31,10 @@ def check_buy_signal(symbol):
     return symbol in buy_signals
 
 def start_scanning():
+    # Start the initial update loop
+    update_display()
     subprocess.Popen(["gnome-terminal", "--", "python3", "stock_scanner.py"])
+
 
 def stop_scanning():
     subprocess.run(["pkill", "-f", "stock_scanner.py"])
@@ -102,7 +105,5 @@ stop_button.pack(side=tk.TOP, padx=10, pady=10)
 exit_button = tk.Button(root, text="Exit Program", command=exit_program)
 exit_button.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-# Start the initial update loop
-update_display()
 
 root.mainloop()
