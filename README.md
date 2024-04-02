@@ -18,6 +18,8 @@ python3 stock_gui.py
 
 It is configured to only work Monday - Friday, 10:15 AM throuth 4:00 PM, Eastern time. 
 
+10:15am Eastern Time is when many Professional New York Stock Exchange people are comfortable with the early morning trading Volume and Volume balance Levels in the overall Stock Market. 10:15am Eastern Time is also just after most of the daily price reversals, and a perfect time to begin watching for the increasing prices in the major Stock Market Indexes like the S&P 500. The times in this Python code are able to be changed by editing the Python script source code in an IDE like Pycharm.
+
 You can also just place a list of 500 stock symbols in the file named "loaded_symbols.txt" with 1 stock symbol per line to 
 quickly add large lists of stocks. 
 
