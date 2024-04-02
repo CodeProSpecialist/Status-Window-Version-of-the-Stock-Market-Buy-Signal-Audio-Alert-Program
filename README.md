@@ -1,6 +1,8 @@
 # Status-Window-Version-of-the-Stock-Market-Buy-Signal-Audio-Alert-Program
 A Python Window program that has a status window for monitoring Stock Market Buy Signals. 
 
+512 Stock Buy Signal Green / Red Light Indicators. You can view the entire S&P 500. 
+
 Green lights for buy signals and red lights when there are no current buy signals. The buy signals also include an audio alert to buy the stock. 
 
 It saves your stock list for tomorrow. 
