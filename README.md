@@ -18,6 +18,9 @@ python3 stock_gui.py
 
 It is configured to only work Monday - Friday, 10:15 AM throuth 4:00 PM, Eastern time. 
 
+You can also just place a list of 500 stock symbols in the file named "loaded_symbols.txt" with 1 stock symbol per line to 
+quickly add large lists of stocks. 
+
 
 ![Screenshot](https://github.com/CodeProSpecialist/Status-Window-Version-of-the-Stock-Market-Buy-Signal-Audio-Alert-Program/assets/111866070/80bc7934-d7d5-4573-92d7-c93311728e57)
 
