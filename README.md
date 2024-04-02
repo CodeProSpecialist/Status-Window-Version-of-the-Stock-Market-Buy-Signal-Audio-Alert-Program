@@ -5,7 +5,7 @@ A Python Window program that has a status window for monitoring Stock Market Buy
 
 Green lights for buy signals and red lights when there are no current buy signals. The buy signals also include an audio alert to buy the stock. 
 
-It saves your stock list for tomorrow. 
+It saves your stock list for tomorrow if you do not press the Clear Symbols button. 
 
 Stock charts displayed in the 
 terminal with technical data for each Stock symbol. 
@@ -19,6 +19,7 @@ python3 stock_gui.py
 It is configured to only work Monday - Friday, 10:15 AM throuth 4:00 PM, Eastern time. 
 
 
+![Screenshot](https://github.com/CodeProSpecialist/Status-Window-Version-of-the-Stock-Market-Buy-Signal-Audio-Alert-Program/assets/111866070/80bc7934-d7d5-4573-92d7-c93311728e57)
 
 
 
