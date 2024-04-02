@@ -24,6 +24,7 @@ quickly add large lists of stocks.
 
 ![Screenshot](https://github.com/CodeProSpecialist/Status-Window-Version-of-the-Stock-Market-Buy-Signal-Audio-Alert-Program/assets/111866070/80bc7934-d7d5-4573-92d7-c93311728e57)
 
+![Screenshot from 2024-04-01 20-36-29](https://github.com/CodeProSpecialist/Status-Window-Version-of-the-Stock-Market-Buy-Signal-Audio-Alert-Program/assets/111866070/db103a24-4fe5-4187-af82-f798c5310d3c)
 
 
 Disclaimer:
