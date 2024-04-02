@@ -141,10 +141,10 @@ def main():
     while True:
         now = datetime.now(pytz.timezone('US/Eastern'))
 
-        #if 1 == 1:  # debug code line to run main loop 24 hours
-        if now >= next_run_time and now.hour < 16:
-            # if 1 == 1:      #debug code line to bypass if statement
-            if now.weekday() < 5:
+        if 1 == 1:  # debug code line to run main loop 24 hours
+        #if now >= next_run_time and now.hour < 16:
+            if 1 == 1:      #debug code line to bypass if statement
+            #if now.weekday() < 5:
                 with open('buy_signals.txt', 'w') as file:
                     file.write('')  # Clear contents of buy_signals.txt
 
