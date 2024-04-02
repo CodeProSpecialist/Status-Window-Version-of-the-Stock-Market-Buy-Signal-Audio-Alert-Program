@@ -110,7 +110,7 @@ light_indicators = []
 for i in range(16):
     for j in range(32):
         symbol_label = tk.Label(frame_on_canvas, text="", width=7, anchor="w")
-        symbol_label.grid(row=j, column=i * 2, padx=(25, 2), pady=2)
+        symbol_label.grid(row=j, column=i * 2, padx=(10, 2), pady=2)
         symbol_labels.append(symbol_label)
 
         light = tk.Label(frame_on_canvas, width=3, bg="red", anchor="w")
